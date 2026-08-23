@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Medellín · Oportunidades activas de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBFE;
+    --selva: #0E5B3A;
+    --selva-container: #B7F0CE;
+    --selva-on-container: #00210F;
+    --magenta: #C31C6B;
+    --magenta-container: #FFD8E6;
+    --magenta-on-container: #3E001C;
+    --surface-container: #F6F3F8;
+    --outline: #E4E0E8;
+    --ink: #1C1B1F;
+    --ink-soft: #49454E;
+    --ink-mute: #79747E;
+    --clima-container: #D6E9FF;
+    --clima-on-container: #06264A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--selva) 0%, #12794E 55%, var(--magenta) 130%);
+    border-radius: 0 0 32px 32px;
+    padding: 28px 24px 32px;
+    color: #FFFFFF;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+  }
+  .hero::before {
+    width: 180px;
+    height: 180px;
+    top: -70px;
+    right: -60px;
+  }
+  .hero::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    left: -40px;
+    background: rgba(255,255,255,0.10);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .chip-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .hero .fecha {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.92;
+    text-transform: capitalize;
+  }
+  main { padding: 28px 20px 0; }
+  .categoria { margin-bottom: 32px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+  }
+  .cat-icon.botanica { background: var(--selva-container); }
+  .cat-icon.clima { background: var(--clima-container); }
+  .cat-icon.ia { background: var(--magenta-container); }
+  .cat-title {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+  .vacio {
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 14px;
+    padding: 4px 2px 0;
+  }
+  .card {
+    background: var(--surface-container);
+    border-radius: 28px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .price-chip {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .price-chip.gratis {
+    background: var(--selva-container);
+    color: var(--selva-on-container);
+  }
+  .price-chip.pago {
+    background: var(--magenta-container);
+    color: var(--magenta-on-container);
+  }
+  .card-resumen {
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .meta-row .cierre {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    padding: 13px 20px;
+    border-radius: 100px;
+  }
+  .btn.gratis { background: var(--selva); }
+  .btn.pago { background: var(--magenta); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding: 20px 20px 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-content">
+      <span class="chip-pill">📡 Radar Medellín · 8:00 a.m.</span>
+      <h1>Oportunidades activas de hoy</h1>
+      <p class="fecha">domingo, 23 de agosto de 2026</p>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon botanica">🌿</div>
+        <div>
+          <span class="cat-title">Botánica floral y conservación</span>
+          <span class="cat-count">· 4 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Becas Colombia Biodiversa — Convocatoria II 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Financia trabajos de grado de pregrado y maestría sobre conocimiento, conservación o uso sostenible de la biodiversidad y flora colombiana.</p>
+        <div class="meta-row">
+          <span>Beca de investigación · Colombia</span>
+          <span>Fundación Alejandro Ángel Escobar (FAAE)</span>
+          <span class="cierre">Cierra: 5 de octubre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.faae.org.co/colombiabiodiversa/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Ciencia ciudadana botánica en Natusfera / iNaturalist</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Invita a registrar y compartir fotos de plantas silvestres para nutrir bases de datos globales de biodiversidad de forma continua.</p>
+        <div class="meta-row">
+          <span>Virtual · Global</span>
+          <span>iNaturalist / red Natusfera</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://spain.inaturalist.org/projects" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Curso de Botánica (certificado)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso autodirigido en línea sobre ciclos de vida, reproducción y conservación de plantas, con inicio inmediato durante todo el año.</p>
+        <div class="meta-row">
+          <span>Virtual · Global</span>
+          <span>Edutin Academy</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://edutin.com/curso-de-botanica-3938" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">XIII Congreso Colombiano de Botánica</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Encuentro académico nacional que reúne a estudiantes, investigadores y aficionados a la botánica del 5 al 9 de octubre de 2026 en Medellín.</p>
+        <div class="meta-row">
+          <span>Presencial · Medellín, Colombia</span>
+          <span>Asociación Colombiana de Botánica (ACB)</span>
+          <span class="cierre">Cierra: 9 de octubre de 2026</span>
+        </div>
+        <a class="btn pago" href="https://acb.org.co/xiiiccb2026/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon clima">🌍</div>
+        <div>
+          <span class="cat-title">Cambio climático y mitigación</span>
+          <span class="cat-count">· 3 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Jóvenes por la Acción Climática</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso gratuito de cinco módulos sobre ciencia del clima, mitigación, adaptación y gobernanza internacional, pensado para jóvenes de la región.</p>
+        <div class="meta-row">
+          <span>Virtual · Global</span>
+          <span>PNUD, Eco House Global y Learning for Nature</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://bogota.gov.co/boletin-oferta-internacional/jovenes-por-la-accion-climatica-curso-gratuito-del-pnud" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Introducción al Cambio Climático (UN CC:Learn)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso introductorio en español sobre los fundamentos del cambio climático, disponible en acceso libre y a ritmo propio.</p>
+        <div class="meta-row">
+          <span>Virtual · Global</span>
+          <span>Naciones Unidas</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://latinclima.org/oportunidades-formacion/curso-sobre-cambio-climatico-de-naciones-unidas" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Bajemos la Temperatura: de la Ciencia Climática a la Acción</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">MOOC en español de cuatro semanas sobre efectos regionales del cambio climático y estrategias de resiliencia y baja emisión por sector.</p>
+        <div class="meta-row">
+          <span>Virtual · Global</span>
+          <span>Banco Mundial (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://latinclima.org/es/oportunidades-formacion/curso-gratuito-del-banco-mundial-sobre-cambio-climatico" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🎓</div>
+        <div>
+          <span class="cat-title">Becas y cursos de IA / educación</span>
+          <span class="cat-count">· 5 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Chevening Scholarships 2027-2028</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Beca totalmente financiada del gobierno británico para cursar una maestría de un año en el Reino Unido en cualquier área, incluida la inteligencia artificial.</p>
+        <div class="meta-row">
+          <span>Presencial · Reino Unido (aplican colombianos)</span>
+          <span>Gobierno del Reino Unido (FCDO)</span>
+          <span class="cierre">Cierra: 6 de octubre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.chevening.org/scholarship/colombia/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Talento GovTech — Curso de Inteligencia Artificial Aplicada</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso corto y asincrónico sobre aplicaciones prácticas de IA, dentro de un catálogo estatal de formación digital con cupos limitados.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia</span>
+          <span>MinTIC — Gobierno Digital</span>
+          <span class="cierre">Cierra: 16 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://gobiernodigital.mintic.gov.co/portal/Cursos-Talento-GovTech/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Crece con Google — Certificados de Carrera</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Otorga becas para certificados profesionales de Google en Coursera, incluyendo fundamentos de inteligencia artificial, a personas en Colombia con barreras económicas.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia</span>
+          <span>Google, Colnodo y MinTIC</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://crece.withgoogle.com/certificates/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Talento Tech — Formación gratuita en Inteligencia Artificial</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa estatal con cupos gratuitos de formación en inteligencia artificial, analítica de datos y otras áreas tecnológicas para mayores de edad.</p>
+        <div class="meta-row">
+          <span>Virtual y presencial · Colombia</span>
+          <span>MinTIC (Gobierno de Colombia)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://talentotech.gov.co/portal/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Fundamentos de IA (Guayerd + IBM SkillsBuild)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Cursos cortos y certificados autoguiados sobre fundamentos de inteligencia artificial e ingeniería de prompts, dirigidos a personas de Latinoamérica.</p>
+        <div class="meta-row">
+          <span>Virtual · Latinoamérica</span>
+          <span>Guayerd / IBM SkillsBuild</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.guayerd.com/catalogue/fundamentals-of-artificial-intelligence/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>reportes/2026-08-23.html</footer>
+</div>
+
+<!-- Notas de esta ejecución: el entorno de este run bloquea por completo el egress saliente a nivel de proxy (política de organización: HTTP 403 en CONNECT hacia cualquier dominio, incluidos google.com y wikipedia.org, confirmado vía /root/.ccr/README.md). Esto impidió usar WebFetch para abrir y confirmar en vivo cada URL, como pide el proceso original. Las oportunidades listadas arriba provienen de resultados reales de WebSearch (URLs devueltas por el buscador, nunca inventadas por el modelo), pero no fueron confirmadas por carga directa de página en esta ejecución. Se recomienda verificar manualmente los links antes de compartir el reporte, o habilitar salida a internet (WebFetch) en el entorno para que las próximas ejecuciones cumplan el estándar de verificación completo. -->
+</body>
+</html>
