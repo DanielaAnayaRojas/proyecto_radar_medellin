@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Medellín · Oportunidades activas de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBFE;
+    --selva: #0E5B3A;
+    --selva-container: #B7F0CE;
+    --selva-on-container: #00210F;
+    --magenta: #C31C6B;
+    --magenta-container: #FFD8E6;
+    --magenta-on-container: #3E001C;
+    --surface-container: #F6F3F8;
+    --outline: #E4E0E8;
+    --ink: #1C1B1F;
+    --ink-soft: #49454E;
+    --ink-mute: #79747E;
+    --clima-container: #D6E9FF;
+    --clima-on-container: #06264A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--selva) 0%, #12794E 55%, var(--magenta) 130%);
+    border-radius: 0 0 32px 32px;
+    padding: 28px 24px 32px;
+    color: #FFFFFF;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+  }
+  .hero::before {
+    width: 180px;
+    height: 180px;
+    top: -70px;
+    right: -60px;
+  }
+  .hero::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    left: -40px;
+    background: rgba(255,255,255,0.10);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .chip-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .hero .fecha {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.92;
+    text-transform: capitalize;
+  }
+  main { padding: 28px 20px 0; }
+  .categoria { margin-bottom: 32px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+  }
+  .cat-icon.botanica { background: var(--selva-container); }
+  .cat-icon.clima { background: var(--clima-container); }
+  .cat-icon.ia { background: var(--magenta-container); }
+  .cat-title {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+  .vacio {
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 14px;
+    padding: 4px 2px 0;
+  }
+  .card {
+    background: var(--surface-container);
+    border-radius: 28px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .price-chip {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .price-chip.gratis {
+    background: var(--selva-container);
+    color: var(--selva-on-container);
+  }
+  .price-chip.pago {
+    background: var(--magenta-container);
+    color: var(--magenta-on-container);
+  }
+  .card-resumen {
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .meta-row .cierre {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    padding: 13px 20px;
+    border-radius: 100px;
+  }
+  .btn.gratis { background: var(--selva); }
+  .btn.pago { background: var(--magenta); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding: 20px 20px 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-content">
+      <span class="chip-pill">📡 Radar Medellín · 8:00 a.m.</span>
+      <h1>Oportunidades activas de hoy</h1>
+      <p class="fecha">sábado, 29 de agosto de 2026</p>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon botanica">🌿</div>
+        <div>
+          <span class="cat-title">Botánica floral y conservación</span>
+          <span class="cat-count">· 7 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Becas Colombia Biodiversa — Convocatoria II 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Apoya con recursos económicos las tesis de estudiantes colombianos de pregrado y maestría sobre conocimiento, conservación o uso sostenible de la biodiversidad del país, incluida la flora.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · estudiantes en Colombia</span>
+          <span>Fundación Alejandro Angel Escobar (FAAE)</span>
+          <span class="cierre">Cierra: 5 de octubre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.faae.org.co/colombiabiodiversa/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Mohamed bin Zayed Species Conservation Fund</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Fondo internacional que respalda con pequeñas subvenciones proyectos de campo enfocados en la conservación de especies amenazadas, incluidas las plantas.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · sin restricción de país</span>
+          <span>Mohamed bin Zayed Species Conservation Fund</span>
+          <span class="cierre">Cierra: 15 de octubre de 2026 (ventana del ciclo de diciembre; el portal de esta ventana abre el 15 de septiembre)</span>
+        </div>
+        <a class="btn gratis" href="https://www.speciesconservation.org/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Whitley Fund for Nature — Whitley Awards 2027</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Premio de liderazgo en conservación que entrega 50.000 libras a proyectos comunitarios de base que protegen ecosistemas y especies amenazadas, incluida la flora, en países de ingresos medios y bajos.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · abierto a Colombia y otros países elegibles de Latinoamérica</span>
+          <span>Whitley Fund for Nature (Reino Unido)</span>
+          <span class="cierre">Cierra: 30 de octubre de 2026 (23:59 GMT)</span>
+        </div>
+        <a class="btn gratis" href="https://whitleyaward.org/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Rufford Small Grants for Nature Conservation</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Fondo británico que financia con hasta 18.000 libras esterlinas proyectos piloto de conservación liderados por profesionales locales en países en desarrollo, incluida la protección de flora amenazada.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · proyecto de campo en Colombia u otros países elegibles de Latinoamérica</span>
+          <span>The Rufford Foundation (Reino Unido)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://apply.ruffordsmallgrants.org/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Understanding Plants — Coursera</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso autoguiado de la Universidad de Tel Aviv que explica de forma introductoria la fisiología vegetal y cómo las plantas perciben su entorno.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Tel Aviv University (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.coursera.org/learn/plantknows" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">XIII Congreso Colombiano de Botánica</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">El congreso nacional más importante de la comunidad botánica colombiana, con charlas, talleres y ponencias sobre investigación, conservación y uso de la flora del país.</p>
+        <div class="meta-row">
+          <span>Presencial · Medellín, Colombia</span>
+          <span>Asociación Colombiana de Botánica (ACB)</span>
+          <span class="cierre">Cierra: 31 de agosto de 2026 (última etapa de tarifa reducida; el congreso se realiza del 5 al 9 de octubre)</span>
+        </div>
+        <a class="btn pago" href="https://acb.org.co/xiiiccb2026/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">VI Congreso Boliviano de Botánica</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Encuentro científico que reunirá a investigadores y estudiantes de Bolivia y la región para compartir avances sobre el estudio, la conservación y el uso sostenible de la flora boliviana.</p>
+        <div class="meta-row">
+          <span>Presencial · La Paz, Bolivia</span>
+          <span>Sociedad Boliviana de Botánica (SBB)</span>
+          <span class="cierre">El congreso se realiza del 30 de septiembre al 2 de octubre de 2026 (fecha límite de inscripción no confirmada)</span>
+        </div>
+        <a class="btn pago" href="https://boliviabotanica2026.sbb.org.bo/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon clima">🌍</div>
+        <div>
+          <span class="cat-title">Cambio climático y mitigación</span>
+          <span class="cat-count">· 17 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Premio Lincoln al Periodismo sobre Políticas Urbanas, Desarrollo Sostenible y Cambio Climático 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Reconoce con premios en efectivo reportajes de investigación de periodistas latinoamericanos sobre políticas de suelo, desarrollo urbano sostenible y la crisis climática.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · Latinoamérica</span>
+          <span>Lincoln Institute of Land Policy / IPYS</span>
+          <span class="cierre">Cierra: 30 de agosto de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.lincolninst.edu/pt-br/research-fellowship-opportunities/2026/premio-lincoln-periodismo-sobre-politicas-urbanas-desarrollo-sostenible-cambio-climatico/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">True Blue Fellowship — Bow Seat</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa de mentoría y financiamiento de hasta 2.500 dólares para doce jóvenes de 16 a 24 años que lideren proyectos artístico-creativos sobre océanos, cuerpos de agua o cambio climático en sus comunidades.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · sin restricción de país</span>
+          <span>Bow Seat Ocean Awareness Programs</span>
+          <span class="cierre">Cierra: 30 de agosto de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://bowseat.org/programs/true-blue-fellowship/apply/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">19° Premio Mercosur de Ciencia, Tecnología e Innovación 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Concurso regional que premia trabajos científico-tecnológicos sobre descarbonización y transición energética, con categorías especiales para jóvenes investigadores.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · Argentina, Brasil, Paraguay, Uruguay, Bolivia y estados asociados de Mercosur</span>
+          <span>Consejo del Mercado Común (Mercosur) / CNPq</span>
+          <span class="cierre">Cierra: 31 de agosto de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.mercosur.int/premio-mercosur-de-ciencia-tecnologia-e-innovacion-abierta-la-convocatoria-2026" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Adaptation Fund Climate Innovation Accelerator (AFCIA) — Cohorte 3 LAC</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Fondo competitivo del Fondo de Adaptación y el Programa Mundial de Alimentos que financia con hasta 250.000 dólares soluciones innovadoras de adaptación climática en agricultura, agua y alertas tempranas.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · El Salvador, Perú y República Dominicana (no incluye Colombia directamente)</span>
+          <span>WFP Innovation Accelerator / Adaptation Fund</span>
+          <span class="cierre">Cierra: 6 de septiembre de 2026 (11:59 p.m. UTC)</span>
+        </div>
+        <a class="btn gratis" href="https://innovation.wfp.org/adaptation-fund-innovation-accelerator" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Global South Civil Society Microgrants 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Otorga microsubvenciones de entre 2.000 y 4.000 dólares a organizaciones de base y colectivos juveniles del Sur Global para proyectos comunitarios sobre bosques tropicales, océanos o la relación entre clima y trabajo.</p>
+        <div class="meta-row">
+          <span>Postulación virtual · África, Latinoamérica y Sudeste asiático</span>
+          <span>Pulitzer Center on Crisis Reporting</span>
+          <span class="cierre">Cierra: 6 de septiembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://pulitzercenter.org/opportunities/reporting-grants-fellowships/global-south-civil-society-microgrants" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Concurso "Jóvenes por el Cambio Climático" — Manizales</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Concurso municipal que entrega microdonaciones a jóvenes manizaleños que propongan campañas, investigación o acciones locales frente al cambio climático.</p>
+        <div class="meta-row">
+          <span>Presencial · Manizales, Colombia</span>
+          <span>Alcaldía de Manizales, con apoyo de Bloomberg Philanthropies y CGLU</span>
+          <span class="cierre">Cierra: 11 de septiembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://centrodeinformacion.manizales.gov.co/concurso-jovenes-por-el-cambio-climatico-abre-inscripciones/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Iniciativas Juveniles frente al Cambio Climático — Medellín</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Convocatoria que seleccionará dieciséis iniciativas juveniles medellinenses de sostenibilidad, biodiversidad y acción climática para recibir capital semilla.</p>
+        <div class="meta-row">
+          <span>Presencial/híbrido · Medellín, Colombia</span>
+          <span>Centrópolis, con apoyo del Fondo Juventud y Acción Climática (Bloomberg Philanthropies)</span>
+          <span class="cierre">Cierra: 29 de septiembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.centropolismedellin.com/abren-convocatoria-para-financiar-iniciativas-juveniles-frente-al-cambio-climatico-en-medellin/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Fondo Juvenil de Justicia Climática 2026 — Bogotá</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Financia con capital semilla iniciativas ambientales lideradas por equipos de al menos tres jóvenes bogotanos de entre 15 y 24 años.</p>
+        <div class="meta-row">
+          <span>Presencial/híbrido · Bogotá, Colombia</span>
+          <span>Alcaldía Mayor de Bogotá / Fondo Juventud y Acción Climática</span>
+          <span class="cierre">Cierra: 4 de octubre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://bogota.gov.co/boletin-oferta-internacional/fondo-juvenil-de-justicia-climatica-2026-hasta-usd-40000" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Créditos de Carbono y Finanzas Sostenibles (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso virtual de CAF que explica cómo funcionan los créditos de carbono y otros instrumentos de finanzas sostenibles para impulsar la transición baja en carbono.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/instrumentos-de-financiamiento-para-la-sostenibilidad-del-sector-privado/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">NOOC Cambio Climático y Biodiversidad (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Nanocurso breve, de alrededor de una hora, que resume los retos del cambio climático y la pérdida de biodiversidad junto con políticas de adaptación y mitigación para la región.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/nooc-cambio-climatico-y-biodiversidad/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Bajemos la Temperatura: de la Ciencia Climática a la Acción</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso masivo del Banco Mundial que reúne a científicos y formuladores de política para explicar los impactos regionales del cambio climático y estrategias sectoriales de resiliencia.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Grupo Banco Mundial (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.coursera.org/learn/cambios-temperatura" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">De Cero a Experto: Construyendo Mercados de Carbono con Integridad</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso virtual autoguiado que introduce los fundamentos de los mercados de carbono y los mecanismos del Artículo 6 del Acuerdo de París para fortalecer capacidades técnicas en la región.</p>
+        <div class="meta-row">
+          <span>Virtual · Latinoamérica y el Caribe</span>
+          <span>PNUMA, vía el Observatorio Regional de Mercados de Carbono</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://accionclimatica-alc.org/omc/curso/de-cero-a-experto/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Juventudes por la Acción Climática — programa de formación (PNUD)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa autoguiado que enseña a jóvenes latinoamericanos conceptos clave del cambio climático y herramientas de incidencia para convertirse en líderes climáticos.</p>
+        <div class="meta-row">
+          <span>Virtual · Latinoamérica</span>
+          <span>PNUD, Eco House Global y Learning for Nature</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.learningfornature.org/es/courses/juventudes-por-la-accion-climatica-programa-de-formacion-para-jovenes-de-latinoamerica/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">UN CC:e-Learn — Cursos sobre Cambio Climático</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Plataforma con más de un centenar de cursos autoguiados y certificados sobre ciencia climática, adaptación y mitigación, respaldada por decenas de organismos de la ONU.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>UN CC:Learn (UNITAR y alianza de agencias de la ONU)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://unccelearn.org/?lang=es" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Educación sobre el Cambio Climático — programa especializado (AcademiaBID)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Serie de cursos autoguiados dirigidos a docentes y público general para enseñar la ciencia básica del cambio climático y estrategias de mitigación y adaptación con ejemplos regionales.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Banco Interamericano de Desarrollo (iniciativa "Súbete")</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://cursos.iadb.org/es/temas/desarrollo-sostenible/programa-especializado-educacion-cambio-climatico" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cambio Climático y Global en América Latina</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso masivo en línea dictado por científicos de la región que aborda las dimensiones sociales, biológicas y económicas del cambio climático en América Latina.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Instituto Interamericano para la Investigación del Cambio Global (IAI)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://cclatam.iai.int/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cambio Climático: México en el Contexto de América Latina</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso masivo con veintiún científicos regionales que explica las bases físicas del cambio climático y sus efectos sociales, hídricos y de biodiversidad en México y la región.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>UNAM (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.coursera.org/learn/cambioclimatico" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🎓</div>
+        <div>
+          <span class="cat-title">Becas y cursos de IA / educación</span>
+          <span class="cat-count">· 18 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">IA Sin Límites — formación gratuita en IA generativa</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa de ocho módulos prácticos de inteligencia artificial generativa, con herramientas como Claude y Amazon Q, que entrega credenciales oficiales de AWS al finalizar.</p>
+        <div class="meta-row">
+          <span>Virtual · Bogotá, Colombia</span>
+          <span>AWS y Alcaldía Mayor de Bogotá</span>
+          <span class="cierre">Cierra: 31 de agosto de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://bogota.awsentrena.com/iasinlimites" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Beca de Maestría DAAD 2026-2027</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Financiación alemana que cubre viaje, manutención y seguro médico para colombianos que quieran cursar una maestría en Alemania, incluyendo áreas STEM y tecnología.</p>
+        <div class="meta-row">
+          <span>Presencial · Alemania (aplica desde Colombia, Ecuador, Perú y Venezuela)</span>
+          <span>DAAD — Servicio Alemán de Intercambio Académico, oficina Bogotá</span>
+          <span class="cierre">Cierra: 24 de septiembre de 2026 (línea STEM: 3 de septiembre de 2026)</span>
+        </div>
+        <a class="btn gratis" href="https://www.daad.co/es/becas/becas-de-posgrado/maestria-2/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Chevening Scholarships Colombia 2027-2028</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Beca del gobierno británico que financia por completo una maestría de un año en el Reino Unido para colombianos con potencial de liderazgo, en cualquier disciplina incluida la IA.</p>
+        <div class="meta-row">
+          <span>Presencial · Reino Unido (aplican colombianos)</span>
+          <span>Gobierno del Reino Unido — Chevening</span>
+          <span class="cierre">Cierra: 6 de octubre de 2026 (11:00 UTC)</span>
+        </div>
+        <a class="btn gratis" href="https://www.chevening.org/scholarship/colombia/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Crece con Google — Becas de Certificados de Carrera</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Google, el Ministerio TIC y Colnodo entregan miles de becas colombianas de acceso gratuito a certificados de carrera en ciberseguridad y analítica de datos, además de cursos de fundamentos de IA.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia</span>
+          <span>Google, MinTIC y Colnodo</span>
+          <span class="cierre">Cierra: 30 de octubre de 2026 (asignación de becas en septiembre de 2026)</span>
+        </div>
+        <a class="btn gratis" href="https://colnodo.org/crececongoogle/es/inscripcion" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Becas de formación en IA — Guayerd e IBM</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa regional con miles de cupos para rutas cortas y autoguiadas sobre fundamentos de IA aplicada al trabajo y a la ingeniería de prompts, con certificación internacional.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país (Colombia y toda Latinoamérica)</span>
+          <span>Guayerd, IBM y Fundación Manos del Sur</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://guayerd.com/ibm-ia-trabajo" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Ruta de aprendizaje en IA — IBM SkillsBuild</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Catálogo de cursos autoguiados en español sobre inteligencia artificial, datos y tecnología que otorgan insignias digitales verificadas al finalizar.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>IBM SkillsBuild</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://skillsbuild.org/es/learning-catalog" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">AI For Everyone (modo oyente)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Introducción no técnica a la inteligencia artificial creada por Andrew Ng, que puede auditarse sin costo, sobre cómo construir una estrategia de IA en cualquier organización.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>DeepLearning.AI (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cursos de inteligencia artificial — Santander Open Academy</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Plataforma con cientos de cursos y becas sin costo, incluyendo rutas prácticas de IA generativa avaladas por Google Cloud y Coursera.</p>
+        <div class="meta-row">
+          <span>Virtual · disponible en más de 22 países (incluye Colombia)</span>
+          <span>Banco Santander (Santander Open Academy)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://app.santanderopenacademy.com/es/program/search?search=inteligencia+artificial+IA" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Formación gratuita en IA y computación en la nube — Nequi y AWS</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Cientos de miles de cupos de capacitación en habilidades digitales, inteligencia artificial y nube en español, dirigidos principalmente a emprendedores y trabajadores independientes en Colombia.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia</span>
+          <span>Nequi Negocios y Amazon Web Services (AWS Entrena Colombia)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://nequi.awsentrena.com" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Gestión de Datos en Modelos de Inteligencia Artificial — SENA</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Formación corta y gratuita del SENA sobre manejo de datos aplicados a modelos de IA, dictada en modalidad virtual a través de la plataforma oficial Betowa.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia</span>
+          <span>SENA — Servicio Nacional de Aprendizaje</span>
+          <span class="cierre">Convocatoria abierta / permanente (fichas rotativas)</span>
+        </div>
+        <a class="btn gratis" href="https://betowa.sena.edu.co/oferta/gestion-de-datos-en-modelos-de-inteligencia-artificial?programId=228347&modality=V" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Talento Tech — Bootcamp de Inteligencia Artificial</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Bootcamps gratuitos de inteligencia artificial, junto con programación, datos, nube y ciberseguridad, mediante convocatorias regionales rotativas en todo el país.</p>
+        <div class="meta-row">
+          <span>Virtual / presencial / híbrida · Colombia (por regiones)</span>
+          <span>Ministerio TIC — Talento Tech</span>
+          <span class="cierre">Convocatoria abierta / permanente (cohortes regionales rotativas)</span>
+        </div>
+        <a class="btn gratis" href="https://www.talentotech.gov.co" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Talento Capital — Ingeniería de IA y Desarrollo Web</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">La Alcaldía de Bogotá e IBM ofrecen miles de cupos gratuitos, en dos niveles, para formarse en ingeniería de inteligencia artificial y desarrollo web con Python.</p>
+        <div class="meta-row">
+          <span>Virtual · Bogotá, Colombia</span>
+          <span>Alcaldía de Bogotá (Secretaría de Desarrollo Económico) e IBM</span>
+          <span class="cierre">Convocatoria abierta hasta agotar cupos</span>
+        </div>
+        <a class="btn gratis" href="https://bogota.gov.co/mi-ciudad/desarrollo-economico/cursos-gratis-bogota-4800-cupos-inteligencia-artificial-y-programacion" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Introducción a la Inteligencia Artificial Contemporánea — Universidad de los Andes</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso que aborda los fundamentos, los paradigmas de aprendizaje automático y las implicaciones éticas de la IA, homologable como crédito hacia la maestría en IA de la universidad.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Universidad de los Andes (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.coursera.org/learn/introduccion-a-la-inteligencia-artificial-contemporanea" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Curso de Inteligencia Artificial Gratis desde Cero — Platzi</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso introductorio de un par de horas para aprender a usar herramientas de IA generativa como ChatGPT y Claude en el trabajo diario, sin conocimientos técnicos previos.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Platzi</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://platzi.com/cursos/intro-ai/" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Estud-IA con AWS — Alcaldía de Medellín y AWS</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Ruta de formación en computación en la nube e inteligencia artificial dirigida a más de 30.000 personas mayores de edad en Medellín y su área metropolitana, con certificación digital.</p>
+        <div class="meta-row">
+          <span>Virtual · Medellín y área metropolitana, Colombia</span>
+          <span>Alcaldía de Medellín y AWS</span>
+          <span class="cierre">Convocatoria abierta / permanente (meta hasta finales de 2027)</span>
+        </div>
+        <a class="btn gratis" href="https://medellin.awsentrena.com/iasinlimites" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Bootcamp de Análisis de Datos con IA — Laboratoria (solo mujeres)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Bootcamp remoto de cinco meses, exclusivo para mujeres, que enseña SQL, Power BI, Python y herramientas de inteligencia artificial aplicadas al análisis de datos.</p>
+        <div class="meta-row">
+          <span>Virtual · mujeres en Chile, Colombia, México y Perú</span>
+          <span>Laboratoria</span>
+          <span class="cierre">Convocatoria por cohortes (verificar fecha del ciclo vigente en el sitio)</span>
+        </div>
+        <a class="btn gratis" href="https://postula.laboratoria.la/bog" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Beca ICETEX 60% — Maestría virtual en Inteligencia Artificial (Universidad Europea, España)</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Apoyo económico que cubre el 60% de la matrícula para que profesionales colombianos cursen una maestría 100% virtual en inteligencia artificial u otras áreas afines.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país (colombianos en Colombia o en el exterior)</span>
+          <span>ICETEX y Universidad Europea (España)</span>
+          <span class="cierre">Cierra: 14 de septiembre de 2026 (5:00 p.m. hora Colombia)</span>
+        </div>
+        <a class="btn pago" href="https://web.icetex.gov.co/es/-/2026-becas-del-60-para-maestrias-virtuales-diferentes-areas-universidad-europea-espana" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Google AI Professional Certificate</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Programa profesional de Google, lanzado este año, con siete cursos cortos y un proyecto final para aplicar la inteligencia artificial a tareas del mundo real.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Google (vía Coursera)</span>
+          <span class="cierre">Convocatoria abierta / permanente (suscripción de pago, con ayuda financiera disponible)</span>
+        </div>
+        <a class="btn pago" href="https://www.coursera.org/professional-certificates/google-ai" target="_blank" rel="noopener">Ver e inscribirse →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>reportes/2026-08-29.html</footer>
+</div>
+
+<!-- Notas de esta ejecución: la investigación se dividió en 3 subagentes en paralelo (uno por categoría), cada uno reconfirmando con al menos 1-2 búsquedas independientes las oportunidades del reporte del 28-ago-2026 y buscando nuevas. WebFetch directo a los dominios de destino siguió bloqueado por el proxy de red del entorno, así que toda verificación se hizo por búsquedas cruzadas en fuentes oficiales y de prensa, priorizando siempre el dominio oficial citado. Botánica (7 activas, antes 6): las 6 de ayer siguen vigentes; se corrigió que el XIII Congreso Colombiano de Botánica se realiza del 5 al 9 de octubre (no solo "inicia" el 9); se agregó Whitley Fund for Nature — Whitley Awards 2027 (cierre 30-oct, elegibilidad confirmada para Latinoamérica). Se descartaron por falta de verificación suficiente: Becas Leonardo Latinoamérica-BBVA, Estímulos a la Investigación del Jardín Botánico de Bogotá, Becas Flora Andina del Jardín Botánico de Quito, becas ASPT/BSA (plazos de marzo ya vencidos), BGCI Global Botanic Garden Fund y Fondation Franklinia (convocatorias 2026 ya cerradas). Cambio climático (17 activas, antes 15): las 15 de ayer siguen vigentes, incluyendo el Premio Lincoln y True Blue Fellowship que cierran mañana (30-ago); se agregaron el 19° Premio Mercosur de Ciencia, Tecnología e Innovación 2026 (cierra 31-ago, tema descarbonización/transición energética) y el MOOC de la UNAM "Cambio Climático: México en el Contexto de América Latina". Se descartaron por vencidas: Youth4Climate 2026, Young Climate Prize 2026, Premios Verdes 2026, ESCALAR-Juventud CATIE, Omega Resilience Awards, Mitigation Action Facility y Climate Finance Accelerator Colombia, y la convocatoria UN CTCN/AFCIA de adaptación (cerró 18-ago); también se descartó una beca Chevening-Ecopetrol por fechas contradictorias entre fuentes y un MOOC de la UNAD sobre bosques por no poder confirmar si tiene costo. Becas/IA (18 activas, antes 16): las 16 de ayer siguen vigentes, con IA Sin Límites confirmada cerrando mañana pasado (31-ago); se agregaron un curso gratuito de Platzi (IA desde cero) y "Estud-IA con AWS" de la Alcaldía de Medellín. Se descartaron por vencidas: PHIA/EDUCA EDTECH, Experta Tech Bogotá (cohorte separada), Colfuturo 2026, Fulbright maestría 2027, AvanzaTEC y Ruta N/Google Cloud Career Launchpad Medellín; también se identificó un programa de IA para mujeres de la Alcaldía de Medellín, IBM y Biz Nation que parece seguir vigente pero sin URL oficial de inscripción verificable, por lo que no se incluyó — se recomienda revisión manual en medellin.gov.co. -->
+</body>
+</html>
