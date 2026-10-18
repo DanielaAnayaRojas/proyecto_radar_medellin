@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Medellín · Oportunidades activas de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBFE;
+    --selva: #0E5B3A;
+    --selva-container: #B7F0CE;
+    --selva-on-container: #00210F;
+    --magenta: #C31C6B;
+    --magenta-container: #FFD8E6;
+    --magenta-on-container: #3E001C;
+    --surface-container: #F6F3F8;
+    --outline: #E4E0E8;
+    --ink: #1C1B1F;
+    --ink-soft: #49454E;
+    --ink-mute: #79747E;
+    --clima-container: #D6E9FF;
+    --clima-on-container: #06264A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--selva) 0%, #12794E 55%, var(--magenta) 130%);
+    border-radius: 0 0 32px 32px;
+    padding: 28px 24px 32px;
+    color: #FFFFFF;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+  }
+  .hero::before {
+    width: 180px;
+    height: 180px;
+    top: -70px;
+    right: -60px;
+  }
+  .hero::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    left: -40px;
+    background: rgba(255,255,255,0.10);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .chip-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .hero .fecha {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.92;
+    text-transform: capitalize;
+  }
+  main { padding: 28px 20px 0; }
+  .categoria { margin-bottom: 32px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+  }
+  .cat-icon.botanica { background: var(--selva-container); }
+  .cat-icon.clima { background: var(--clima-container); }
+  .cat-icon.ia { background: var(--magenta-container); }
+  .cat-title {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+  .vacio {
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 14px;
+    padding: 4px 2px 0;
+  }
+  .card {
+    background: var(--surface-container);
+    border-radius: 28px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .price-chip {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .price-chip.gratis {
+    background: var(--selva-container);
+    color: var(--selva-on-container);
+  }
+  .price-chip.pago {
+    background: var(--magenta-container);
+    color: var(--magenta-on-container);
+  }
+  .card-resumen {
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .meta-row .cierre {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    padding: 13px 20px;
+    border-radius: 100px;
+  }
+  .btn.gratis { background: var(--selva); }
+  .btn.pago { background: var(--magenta); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding: 20px 20px 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-content">
+      <span class="chip-pill">📡 Radar Medellín · 8:00 a.m.</span>
+      <h1>Oportunidades activas de hoy</h1>
+      <p class="fecha">domingo, 18 de octubre de 2026</p>
+    </div>
+  </div>
+
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon botanica">🌿</div>
+        <div>
+          <span class="cat-title">Botánica floral y conservación</span>
+          <span class="cat-count">· 5 activas hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Voluntariado — Jardín Botánico de Medellín</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Vincula a personas interesadas en botánica y educación ambiental como voluntarias en distintos proyectos del jardín, previa carta de intención.</p>
+        <div class="meta-row">
+          <span>Presencial · Medellín, Colombia</span>
+          <span>Jardín Botánico de Medellín — Joaquín Antonio Uribe</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.botanicomedellin.org/contactanos/voluntariado/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Rufford Small Grants for Nature Conservation</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Fondo británico que financia con hasta 18.000 libras proyectos pequeños de conservación de la naturaleza —incluida flora amenazada— liderados por profesionales jóvenes en países en desarrollo, sin fecha límite fija.</p>
+        <div class="meta-row">
+          <span>Virtual · países en desarrollo, incluida Colombia</span>
+          <span>The Rufford Foundation</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://apply.ruffordsmallgrants.org/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">IDEA WILD — Becas de equipos para conservación</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Dona equipos de campo como cámaras, GPS o material de herbario a investigadores y conservacionistas de países en desarrollo, incluida Colombia, con recepción continua de solicitudes.</p>
+        <div class="meta-row">
+          <span>Virtual · países en desarrollo, incluye Colombia</span>
+          <span>IDEA WILD</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://ideawild.org/application/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Naturalista Colombia (iNaturalist)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Plataforma de ciencia ciudadana de uso libre para registrar y ayudar a identificar plantas y otras especies presentes en el territorio colombiano.</p>
+        <div class="meta-row">
+          <span>Virtual / app móvil · Colombia</span>
+          <span>Instituto Alexander von Humboldt (nodo GBIF Colombia)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://colombia.inaturalist.org" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Afiliación a la Asociación Colombiana de Botánica (ACB)</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Membresía profesional o estudiantil que da acceso a red académica, beneficios y tarifas preferenciales en eventos de botánica colombiana.</p>
+        <div class="meta-row">
+          <span>Virtual (postulación) · Colombia</span>
+          <span>Asociación Colombiana de Botánica (ACB)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn pago" href="https://acb.org.co/afiliacion/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon clima">🌍</div>
+        <div>
+          <span class="cat-title">Cambio climático y mitigación</span>
+          <span class="cat-count">· 9 activas hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Global EbA Fund — Small-Size Grants 2026</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Fondo internacional que financia con hasta 250.000 dólares proyectos que usan ecosistemas para adaptar comunidades al cambio climático en países elegibles, incluida Colombia.</p>
+        <div class="meta-row">
+          <span>Virtual (postulación) · países elegibles ODA, incluida Colombia</span>
+          <span>Global EbA Fund (UICN y PNUMA, financiado por el gobierno alemán)</span>
+          <span class="cierre">Ventana de postulación: 28 de septiembre al 26 de octubre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://globalebafund.org/small-size-grants/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">NOOC Cambio Climático y Biodiversidad (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso corto y flexible que introduce los fundamentos del cambio climático, sus impactos en los ecosistemas y las posibles rutas de acción.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/nooc-cambio-climatico-y-biodiversidad/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Instrumentos de Financiamiento para la Sostenibilidad del Sector Privado (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Formación virtual sobre mecanismos financieros y créditos de carbono que impulsan la transición sostenible del sector privado en la región.</p>
+        <div class="meta-row">
+          <span>Virtual, acceso 24/7 · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/instrumentos-de-financiamiento-para-la-sostenibilidad-del-sector-privado/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Introducción al Cambio Climático — UN CC:Learn / UNITAR</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso introductorio, gratuito y de ritmo propio elaborado por una alianza de organismos de la ONU para entender los fundamentos del cambio climático.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>UNITAR / UN CC:Learn</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://unccelearn.org/course/view.php?id=13&amp;page=overview" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cambio Climático: del Aprendizaje a la Acción — UN CC:Learn / UNITAR</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso insignia de Naciones Unidas con conferencias y entrevistas de expertos que acompaña el paso del conocimiento climático a la acción concreta.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>UNITAR / UN CC:Learn</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://unccelearn.org/course/view.php?id=98&amp;page=overview" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Juventudes por la Acción Climática</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa formativo autoguiado del PNUD para jóvenes de Latinoamérica y el Caribe sobre cambio climático, participación ciudadana y desarrollo sostenible.</p>
+        <div class="meta-row">
+          <span>Virtual · Latinoamérica y el Caribe</span>
+          <span>PNUD, con Eco House Global (Learning for Nature)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.learningfornature.org/en/courses/juventudes-por-la-accion-climatica-programa-de-formacion-para-jovenes-de-latinoamerica/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cambio Climático para Instituciones Financieras de América Latina y el Caribe</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso tutorizado del BID sobre los riesgos y oportunidades del cambio climático para el sector financiero, incluidos los mercados de carbono.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Banco Interamericano de Desarrollo / INDES</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://cursos.iadb.org/es/indes/cambio-clim-tico-para-instituciones-financieras-de-am-rica-latina-y-el-caribe" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Introducción a la gestión fiscal para la acción climática</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso autoguiado del BID dirigido a funcionarios públicos sobre por qué los ministerios de hacienda son actores clave frente a la crisis climática.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Banco Interamericano de Desarrollo</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://cursos.iadb.org/es/temas/desarrollo-instituciones/introduccion-gestion-fiscal-accion-climatica" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Maestría en Mitigación y Adaptación al Cambio Climático (Universidad Sergio Arboleda)</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Programa de posgrado presencial y virtual orientado a formar profesionales capaces de diseñar estrategias de cambio climático para empresas y gobiernos.</p>
+        <div class="meta-row">
+          <span>Presencial y virtual · Bogotá, Colombia</span>
+          <span>Universidad Sergio Arboleda</span>
+          <span class="cierre">Admisión continua · fecha de cierre varía según periodo, verificar al inscribirse</span>
+        </div>
+        <a class="btn pago" href="https://www.usergioarboleda.edu.co/posgrados/maestria-en-mitigacion-y-adaptacion-al-cambio-climatico/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🎓</div>
+        <div>
+          <span class="cat-title">Becas y cursos de IA / educación</span>
+          <span class="cat-count">· 14 activas hoy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">IA y ChatGPT 2026 — Santander Open Academy</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa gratuito y autodirigido para aprender a usar ChatGPT y otras herramientas de inteligencia artificial, abierto a cualquier persona sin ser cliente del banco.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia y otros países, mayores de 18 años</span>
+          <span>Banco Santander (Santander Open Academy), con Coursera y Google Cloud</span>
+          <span class="cierre">Cierra: 9 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://app.santanderopenacademy.com/es/program/ia-y-chatgpt-2026" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Bootcamp gratuito en IA — Talento Tech (MinTIC)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Bootcamps intensivos y gratuitos de más de 150 horas en inteligencia artificial y otras habilidades digitales, con cupos regionales rotativos.</p>
+        <div class="meta-row">
+          <span>Virtual y presencial · Colombia</span>
+          <span>MinTIC — Talento Tech</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://talentotech.gov.co/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Curso de Iniciación a la Inteligencia Artificial — SENA</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso gratuito para desarrollar bases de álgebra, estadística y lógica de programación aplicadas a la inteligencia artificial.</p>
+        <div class="meta-row">
+          <span>Virtual y presencial · Colombia</span>
+          <span>SENA (plataforma Betowa)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://betowa.sena.edu.co/oferta/iniciacion-a-la-inteligencia-artificial" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cursos gratis de IA y computación en la nube — Nequi + AWS Entrena</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Formación virtual y gratuita en inteligencia artificial y computación en la nube para usuarios de la app Nequi, dentro de una alianza con cientos de miles de cupos.</p>
+        <div class="meta-row">
+          <span>Virtual · Colombia (usuarios de Nequi)</span>
+          <span>Nequi (Bancolombia) y AWS</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://nequi.awsentrena.com" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Fundamentos de Inteligencia Artificial — IBM SkillsBuild</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Ruta de aprendizaje gratuita en español sobre fundamentos de inteligencia artificial, con credencial digital al finalizar.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>IBM SkillsBuild</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://skillsbuild.org/es/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Elements of AI</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso introductorio de inteligencia artificial sin requisitos técnicos, disponible en español y desarrollado por una universidad europea.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Universidad de Helsinki / MinnaLearn</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.elementsofai.com/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Fundamentos de IA Aplicada al Trabajo — Guayerd + IBM</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso asíncrono y gratuito sobre el uso práctico de la inteligencia artificial para la productividad laboral, dentro de un programa regional de becas.</p>
+        <div class="meta-row">
+          <span>Virtual, a su propio ritmo · Latinoamérica (incluye Colombia)</span>
+          <span>Guayerd, IBM y Fundación Manos del Sur</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://guayerd.com/ibm-ia-trabajo" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Azure AI Fundamentals (Microsoft Learn)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Ruta de aprendizaje gratuita sobre los fundamentos de la inteligencia artificial, el aprendizaje automático y los servicios cognitivos de Azure.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país (examen de certificación oficial tiene costo aparte)</span>
+          <span>Microsoft Learn</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">AI Prompting for Everyone (DeepLearning.AI)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso de Andrew Ng para mejorar el uso de asistentes de inteligencia artificial en tareas de búsqueda, escritura y creación de contenido.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>DeepLearning.AI</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.deeplearning.ai/courses/ai-prompting-for-everyone" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cursos autoguiados gratuitos — NVIDIA Deep Learning Institute</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Catálogo de cursos autoguiados y gratuitos de NVIDIA sobre inteligencia artificial generativa, ciencia de datos y aprendizaje profundo.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>NVIDIA Deep Learning Institute</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://learn.nvidia.com/self-paced-courses" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Kaggle Learn</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Microcursos prácticos y gratuitos sobre aprendizaje automático, procesamiento de lenguaje natural y ética de la inteligencia artificial, con ejercicios en notebooks reales.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Kaggle (Google)</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://www.kaggle.com/learn" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">The LLM Course — Hugging Face</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso gratuito de trece capítulos para aprender ingeniería de modelos de lenguaje usando las librerías de Hugging Face.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Hugging Face</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://huggingface.co/learn/llm-course/en/chapter1/1" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">AI Agents Course — Hugging Face</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso gratuito y avanzado para aprender a construir agentes de inteligencia artificial con razonamiento en varios pasos y sistemas multiagente.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Hugging Face</span>
+          <span class="cierre">Convocatoria abierta / permanente</span>
+        </div>
+        <a class="btn gratis" href="https://huggingface.co/learn/agents-course/unit0/introduction" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">INMERXIA — Semana de la Inteligencia Artificial</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Primer gran evento de inteligencia artificial de Colombia en Medellín, con boletería general de pago y una sesión gratuita solo por invitación para jóvenes.</p>
+        <div class="meta-row">
+          <span>Presencial (varias sedes) · Medellín, Colombia (boletería general en TuBoleta; sesión "Ciudad Joven" gratuita por invitación)</span>
+          <span>Agencia Metanol y duE Films, con Alcaldía de Medellín</span>
+          <span class="cierre">Evento del 9 al 13 de noviembre de 2026 (registro/boletería previa)</span>
+        </div>
+        <a class="btn pago" href="https://inmerxia.co/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    index.html · Radar Medellín
+  </footer>
+
+</div>
+</body>
+</html>
+<!-- Notas de esta ejecucion (18 de octubre de 2026):
+WebFetch bloqueado (ENOTFOUND) para globalebafund.org e inmerxia.co: ningun link se verifico con fetch directo hoy; todos son carry-over de verificaciones previas (links canonicos/genericos). Global EbA Fund (cierre 26 oct) reconfirmado hoy por busqueda reciente que cita la URL exacta.
+Retiradas hoy: ninguna (todas las fechas de cierre siguen vigentes).
+Busqueda de hoy no arrojo oportunidades nuevas verificables con link oficial (becas IA encontradas ya cerradas o sin fecha).
+Conteos: 5 + 9 + 14 = 28.
+-->
