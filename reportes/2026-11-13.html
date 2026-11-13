@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Medellín · Oportunidades activas de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBFE;
+    --selva: #0E5B3A;
+    --selva-container: #B7F0CE;
+    --selva-on-container: #00210F;
+    --magenta: #C31C6B;
+    --magenta-container: #FFD8E6;
+    --magenta-on-container: #3E001C;
+    --surface-container: #F6F3F8;
+    --outline: #E4E0E8;
+    --ink: #1C1B1F;
+    --ink-soft: #49454E;
+    --ink-mute: #79747E;
+    --clima-container: #D6E9FF;
+    --clima-on-container: #06264A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--selva) 0%, #12794E 55%, var(--magenta) 130%);
+    border-radius: 0 0 32px 32px;
+    padding: 28px 24px 32px;
+    color: #FFFFFF;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+  }
+  .hero::before {
+    width: 180px;
+    height: 180px;
+    top: -70px;
+    right: -60px;
+  }
+  .hero::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    left: -40px;
+    background: rgba(255,255,255,0.10);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .chip-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .hero .fecha {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.92;
+    text-transform: capitalize;
+  }
+  main { padding: 28px 20px 0; }
+  .categoria { margin-bottom: 32px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+  }
+  .cat-icon.botanica { background: var(--selva-container); }
+  .cat-icon.clima { background: var(--clima-container); }
+  .cat-icon.ia { background: var(--magenta-container); }
+  .cat-title {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+  .vacio {
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 14px;
+    padding: 4px 2px 0;
+  }
+  .card {
+    background: var(--surface-container);
+    border-radius: 28px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .price-chip {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .price-chip.gratis {
+    background: var(--selva-container);
+    color: var(--selva-on-container);
+  }
+  .price-chip.pago {
+    background: var(--magenta-container);
+    color: var(--magenta-on-container);
+  }
+  .card-resumen {
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .meta-row .cierre {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    padding: 13px 20px;
+    border-radius: 100px;
+  }
+  .btn.gratis { background: var(--selva); }
+  .btn.pago { background: var(--magenta); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding: 20px 20px 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-content">
+      <span class="chip-pill">📡 Radar Medellín · 8:00 a.m.</span>
+      <h1>Oportunidades activas de hoy</h1>
+      <p class="fecha">viernes, 13 de noviembre de 2026</p>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🤝</div>
+        <div>
+          <span class="cat-title">IA ética y para el bien en educación</span>
+          <span class="cat-count">· 0 activas hoy</span>
+        </div>
+      </div>
+      <p class="vacio">Hoy no se encontraron oportunidades activas y verificables en esta categoría.</p>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon botanica">🌿</div>
+        <div>
+          <span class="cat-title">Botánica floral y conservación</span>
+          <span class="cat-count">· 0 activas hoy</span>
+        </div>
+      </div>
+      <p class="vacio">Hoy no se encontraron oportunidades activas y verificables en esta categoría.</p>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon clima">🌍</div>
+        <div>
+          <span class="cat-title">Cambio climático y mitigación</span>
+          <span class="cat-count">· 1 activas hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">NOOC Cambio Climático y Biodiversidad (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso corto y flexible que introduce los fundamentos del cambio climático, sus impactos en los ecosistemas y las posibles rutas de acción.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/en/courses/nooc-climate-change-and-biodiversity" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🎓</div>
+        <div>
+          <span class="cat-title">Becas y cursos de IA / educación</span>
+          <span class="cat-count">· 0 activas hoy</span>
+        </div>
+      </div>
+      <p class="vacio">Hoy no se encontraron oportunidades activas y verificables en esta categoría.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    index.html · reportes/2026-11-13.html · Radar Medellín
+  </footer>
+
+</div>
+</body>
+</html>
+<!-- Notas de esta ejecucion (13 de noviembre de 2026):
+Red bloqueada: WebFetch fallo con ENOTFOUND (www.elementsofai.com); ningun link se pudo verificar con fetch directo. Hay que permitir los dominios de las oportunidades en la red del entorno.
+Siguiendo la regla estricta de CLAUDE.md, se descartaron los 23 links carry-over de dias anteriores por no tener evidencia reciente de la URL exacta.
+Aceptada solo con evidencia de busqueda: CAF NOOC Cambio Climatico y Biodiversidad, URL https://www.caf.com/en/courses/nooc-climate-change-and-biodiversity (aparecio en la busqueda; cierre 31-dic-2026 segun boletin Bogota y listado universitario). NO verificada por fetch directo.
+Descartadas: Rufford (sin URL oficial en la busqueda; fechas de agregadores contradictorias); ICETEX-India IA (cierre 17-nov, presencial en la India, fuente no oficial, sin gratuidad confirmada); Google/Colnodo (cerro 26-oct); MinTIC/AvanzaTEC (sin convocatoria vigente confirmada).
+Conteos: 0 + 0 + 1 + 0 = 1.
+-->
