@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Medellín · Oportunidades activas de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBFE;
+    --selva: #0E5B3A;
+    --selva-container: #B7F0CE;
+    --selva-on-container: #00210F;
+    --magenta: #C31C6B;
+    --magenta-container: #FFD8E6;
+    --magenta-on-container: #3E001C;
+    --surface-container: #F6F3F8;
+    --outline: #E4E0E8;
+    --ink: #1C1B1F;
+    --ink-soft: #49454E;
+    --ink-mute: #79747E;
+    --clima-container: #D6E9FF;
+    --clima-on-container: #06264A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--selva) 0%, #12794E 55%, var(--magenta) 130%);
+    border-radius: 0 0 32px 32px;
+    padding: 28px 24px 32px;
+    color: #FFFFFF;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+  }
+  .hero::before {
+    width: 180px;
+    height: 180px;
+    top: -70px;
+    right: -60px;
+  }
+  .hero::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    left: -40px;
+    background: rgba(255,255,255,0.10);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .chip-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .hero .fecha {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.92;
+    text-transform: capitalize;
+  }
+  main { padding: 28px 20px 0; }
+  .categoria { margin-bottom: 32px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+  }
+  .cat-icon.botanica { background: var(--selva-container); }
+  .cat-icon.clima { background: var(--clima-container); }
+  .cat-icon.ia { background: var(--magenta-container); }
+  .cat-title {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+  .vacio {
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 14px;
+    padding: 4px 2px 0;
+  }
+  .card {
+    background: var(--surface-container);
+    border-radius: 28px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .price-chip {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .price-chip.gratis {
+    background: var(--selva-container);
+    color: var(--selva-on-container);
+  }
+  .price-chip.pago {
+    background: var(--magenta-container);
+    color: var(--magenta-on-container);
+  }
+  .card-resumen {
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .meta-row .cierre {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    padding: 13px 20px;
+    border-radius: 100px;
+  }
+  .btn.gratis { background: var(--selva); }
+  .btn.pago { background: var(--magenta); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding: 20px 20px 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-content">
+      <span class="chip-pill">📡 Radar Medellín · 8:00 a.m.</span>
+      <h1>Oportunidades activas de hoy</h1>
+      <p class="fecha">jueves, 26 de noviembre de 2026</p>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🤝</div>
+        <div>
+          <span class="cat-title">IA ética y para el bien en educación</span>
+          <span class="cat-count">· 1 activa hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Preparando a los docentes para un mundo saturado de IA (webinar EdWeek)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Seminario virtual que analiza cómo preparar a los docentes para enseñar con criterio ético frente a la inteligencia artificial, más allá de capacitarlos solo en herramientas técnicas.</p>
+        <div class="meta-row">
+          <span>Virtual · en inglés, sin restricción de país</span>
+          <span>Education Week (EdWeek) — K-12 Essentials Forum</span>
+          <span class="cierre">Cierra: 10 de diciembre de 2026 (webinar en vivo, 2:00–4:30 p.m. ET)</span>
+        </div>
+        <a class="btn gratis" href="https://www.edweek.org/events/k-12-essentials-forum/preparing-teachers-for-an-ai-heavy-world" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon botanica">🌿</div>
+        <div>
+          <span class="cat-title">Botánica floral y conservación</span>
+          <span class="cat-count">· 5 activas hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Applied Plant Conservation Course (CPC Rare Plant Academy)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso profesional virtual y a ritmo propio que enseña buenas prácticas para conservar especies silvestres de plantas raras y amenazadas.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Center for Plant Conservation (CPC)</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://saveplants.org/courses/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">IUCN Red List Training</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso virtual y autodirigido con la metodología oficial de la UICN para evaluar el riesgo de extinción de especies, incluida la flora amenazada.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>IUCN / ConservationTraining.org</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://www.conservationtraining.org/course/view.php?id=2654" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Introducción a la Conservación de Semillas (BGCI)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Módulo introductorio y gratuito pensado para jardines botánicos con poca o ninguna experiencia previa en el manejo de bancos de semillas.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Botanic Gardens Conservation International (BGCI)</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://training.bgci.org/course/info.php?id=25" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Bioseguridad para Jardines Botánicos y Arboretos (BGCI)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Módulo breve en línea, también disponible en español, que enseña a gestionar el riesgo de plagas y enfermedades en colecciones vegetales vivas.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Botanic Gardens Conservation International (BGCI)</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://training.bgci.org/course/info.php?id=45" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Membresía Individual de BGCI</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Membresía anual que da acceso a la formación online y a tarifas preferenciales en los congresos de la red mundial de jardines botánicos.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>Botanic Gardens Conservation International (BGCI)</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn pago" href="https://www.bgci.org/membership/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon clima">🌍</div>
+        <div>
+          <span class="cat-title">Cambio climático y mitigación</span>
+          <span class="cat-count">· 5 activas hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Climate Democracy Accelerator 2027</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Programa de seis meses con financiamiento y mentoría para colectivos y organizaciones que impulsan procesos participativos de transición climática.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>People Powered</span>
+          <span class="cierre">Cierra: 27 de noviembre de 2026, 11:59 p.m. UTC</span>
+        </div>
+        <a class="btn gratis" href="https://www.peoplepowered.org/climate-democracy-accelerator" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">NOOC Cambio Climático y Biodiversidad (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Nanocurso corto y gratuito que resume los principales desafíos del cambio climático y sus vínculos con la biodiversidad en la región.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/nooc-cambio-climatico-y-biodiversidad/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Cambio climático y biodiversidad: oportunidades y desafíos para ALC (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso de nivel intermedio que profundiza en la relación entre el clima y la biodiversidad en América Latina y el Caribe.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierra: 31 de diciembre de 2026</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/es/capacitaciones/cambio-climatico-y-biodiversidad-oportunidades-y-desafios-para-america-latina-y-el-caribe/" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Mastering International Climate Negotiations (UNITAR)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Curso autoformativo de una hora, con videolecciones, que explica cómo funciona el proceso de negociación climática de la ONU y cómo seguir sus conferencias internacionales.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>UNITAR / UN CC:Learn</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://event.unitar.org/product/12548" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">NOOC Futuro verde: la nueva era de la energía (CAF)</div>
+          <span class="price-chip gratis">Gratis</span>
+        </div>
+        <p class="card-resumen">Nanocurso que explica la transición hacia fuentes de energía limpia y sus principales oportunidades y retos para la región.</p>
+        <div class="meta-row">
+          <span>Virtual · sin restricción de país</span>
+          <span>CAF — Banco de Desarrollo de América Latina y el Caribe</span>
+          <span class="cierre">Cierre: inscripción abierta de forma continua</span>
+        </div>
+        <a class="btn gratis" href="https://www.caf.com/en/courses/nooc-green-future-the-new-age-of-energy" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <div class="cat-header">
+        <div class="cat-icon ia">🎓</div>
+        <div>
+          <span class="cat-title">Becas y cursos de IA / educación</span>
+          <span class="cat-count">· 1 activa hoy</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Beca Programa Internacional de IA (ITBA, Argentina)</div>
+          <span class="price-chip pago">De pago</span>
+        </div>
+        <p class="card-resumen">Descuento del 30% para estudiantes extranjeros que cursen el programa de inteligencia artificial del Instituto Tecnológico de Buenos Aires, dictado en inglés.</p>
+        <div class="meta-row">
+          <span>Presencial · Buenos Aires, Argentina</span>
+          <span>ITBA — Escuela de Innovación / Becas Argentina</span>
+          <span class="cierre">Cierra: 15 de diciembre de 2026 (edición de verano, jul-2027)</span>
+        </div>
+        <a class="btn pago" href="https://www.argentina.gob.ar/node/475950" target="_blank" rel="noopener">Ver e inscribirse &#8594;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    index.html · reportes/2026-11-26.html · Radar Medellín
+  </footer>
+
+</div>
+</body>
+</html>
+<!-- Notas de esta ejecucion (26 de noviembre de 2026):
+Red bloqueada: WebFetch directo fallo con ENOTFOUND para todos los hosts probados (edweek.org, saveplants.org, conservationtraining.org, training.bgci.org, bgci.org, peoplepowered.org, caf.com, unitar.org, argentina.gob.ar), igual que en ejecuciones anteriores. Toda la verificacion de hoy se hizo por WebSearch con el estandar reforzado de evidencia reciente exigido por CLAUDE.md, usando 4 agentes de investigacion en paralelo (uno por categoria).
+IA etica/for good (1): se reconfirma la unica tarjeta de ayer (webinar EdWeek "Preparing Teachers for an AI-Heavy World", cierra 10-dic-2026) con evidencia de busqueda reciente fuerte, sin cambios de URL ni condiciones. Se evaluaron y descartaron: MOOC de etica de IA de UNESCO via Coursera (plataforma prohibida), sesion suelta de UNIR sobre IA etica en su ciclo "IA aplicada a la educacion" (sin fecha especifica verificable), curso AGESIC/gub.uy de ciudadania digital (fuera de foco tematico y con posible restriccion a Uruguay), webinars de UNESCO IITE (todos con fecha ya pasada), cursos de MinTIC CiberPaz, Fundacion Telefonica Movistar y MinTIC/Code.org (sin fecha de cierre ni URL de inscripcion verificable).
+Botanica (5): se reconfirman las 5 tarjetas de ayer sin cambios de URL ni condiciones (saveplants.org/courses, conservationtraining.org id=2654, training.bgci.org id=25 y id=45, bgci.org/membership), todas con evidencia de busqueda reciente fuerte. Se evaluaron y descartaron candidatos nuevos: diplomados/club de ciencias/vacaciones cientificas del Jardin Botanico de Bogota (restringidos a residentes de Bogota y con plazos vencidos), curso-taller de montaje de ejemplares botanicos JBB (sin fechas visibles), Plant Guardians Course BGCI (sin edicion vigente confirmada), 9th Global Botanic Gardens Congress BGCI Chicago ago-2027 (aun no abre registro, solo lista de notificacion).
+Clima (5): se reconfirman las 5 tarjetas de ayer. Climate Democracy Accelerator sigue activa hoy, cierra manana 27-nov-2026 11:59pm UTC (probablemente su ultima aparicion en el radar antes del cierre). Las 2 tarjetas de CAF con fecha de cierre confirmada (31-dic-2026) y las 2 de inscripcion continua (UNITAR, NOOC energia) se mantienen sin cambios, todas con evidencia de busqueda reciente fuerte citando la URL exacta. Se evaluaron y descartaron: UICN Academy certificate programmes (sin confirmacion de gratuidad/fecha), CEPAL "Innovar para la complejidad" (ya dictado), UNEP FI curso de riesgos climaticos (sin fecha 2026 confirmable), Climate Leadership Programme 2027 (presencial en Bruselas, fuera de alcance), becas Alexander von Humboldt Alemania (beca de investigacion, no curso/beca educativa con fecha clara), Fondo de Accion para la Mitigacion+ (financiamiento de proyectos, no es curso/beca), BID "Educacion sobre el cambio climatico" (sin fecha de cierre verificable).
+Becas IA/educacion (1): se reconfirma la tarjeta de ITBA (argentina.gob.ar/node/475950), misma URL y fechas que ayer, con evidencia de busqueda reciente fuerte corroborada por una segunda pagina oficial del mismo portal. Dia nuevamente debil en la categoria: se descartaron Colfuturo 2027 (convocatoria aun no abre), DAAD Helmut Schmidt (cerrado 31-jul-2026) y EPOS (sin maestria de IA especifica confirmada), Chevening Colombia 2027-28 (cerrado 6-oct-2026), OEA-VIU maestria IA (todas las fechas encontradas ya vencieron), Erasmus Mundus EMAI/DEAI (solo evidencia de agregadores de becas con fechas contradictorias, sin confirmacion en fuente oficial por bloqueo de red a upf.edu/deai.ulb.be), MinTIC/Google/Samsung/Bogota "IA sin limites" (convocatorias ya cerradas o sin fecha verificable), Fundacion Social Perea (fuente unica, fechas inconsistentes, cobra por certificado).
+Conteos: 1 + 5 + 5 + 1 = 12 (igual que ayer; ninguna tarjeta nueva encontrada hoy, las 12 de ayer quedan reconfirmadas con evidencia de busqueda reciente).
+-->
